@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1>⚡ Algorithm Visualizer</h1>
+                <p>Understand algorithms through interactive visualizations</p>
+            </div>
+
+            <button class="theme-btn" onclick="toggleTheme()">
+                🌙 Toggle Theme
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab-btn active"
+                    onclick="showSection('sorting', this)">
+                Sorting
+            </button>
+
+            <button class="tab-btn"
+                    onclick="showSection('searching', this)">
+                Searching
+            </button>
+
+            <button class="tab-btn"
+                    onclick="showSection('trees', this)">
+                Trees
+            </button>
+
+            <button class="tab-btn"
+                    onclick="showSection('graphs', this)">
+                Graphs
+            </button>
+        </nav>
+
+
+        <!-- ================================= -->
+        <!-- SORTING SECTION -->
+        <!-- ================================= -->
+
+        <section id="sorting" class="section">
+
+            <div class="section-heading">
+                <h2>Sorting Visualizer</h2>
+                <p>Watch how different sorting algorithms arrange elements.</p>
+            </div>
+
+            <!-- Sorting Controls -->
+            <div class="card controls-card">
+                <h3>Algorithm Settings</h3>
+
+                <div class="controls-grid">
+
+                    <div class="control-group">
+                        <label for="algorithm">Select Algorithm</label>
+
+                        <select id="algorithm">
+                            <option value="bubble">Bubble Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="merge">Merge Sort</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="arraySize">
+                            Array Size: <span id="sizeValue">30</span>
+                        </label>
+
+                        <input
+                            type="range"
+                            id="arraySize"
+                            min="5"
+                            max="60"
+                            value="30"
+                            oninput="updateArraySize()"
+                        >
+                    </div>
+
+                    <div class="control-group">
+                        <label for="speed">
+                            Speed: <span id="speedValue">Medium</span>
+                        </label>
+
+                        <input
+                            type="range"
+                            id="speed"
+                            min="1"
+                            max="100"
+                            value="50"
+                            oninput="updateSpeed()"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="button-group">
+                    <button class="primary-btn" onclick="generateArray()">
+                        Generate Array
+                    </button>
+
+                    <button class="primary-btn" onclick="startAlgorithm()">
+                        ▶ Start Sorting
+                    </button>
+
+                    <button class="secondary-btn" onclick="pauseAlgorithm()">
+                        ⏸ Pause
+                    </button>
+
+                    <button class="secondary-btn" onclick="resetVisualizer()">
+                        ↻ Reset
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Sorting Visualization -->
+            <div class="card visualization-card">
+                <div class="card-heading">
+                    <h3>Array Visualization</h3>
+                    <span id="status" class="status">Ready</span>
+                </div>
+
+                <div id="array" class="array-container"></div>
+
+                <div class="legend">
+                    <span>
+                        <i class="legend-box purple"></i> Unsorted
+                    </span>
+
+                    <span>
+                        <i class="legend-box red"></i> Comparing
+                    </span>
+
+                    <span>
+                        <i class="legend-box green"></i> Sorted
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- Sorting Statistics -->
+            <div class="stats-grid">
+
+                <div class="card stat-card">
+                    <h4>Comparisons</h4>
+                    <p id="comparisons">0</p>
+                </div>
+
+                <div class="card stat-card">
+                    <h4>Swaps</h4>
+                    <p id="swaps">0</p>
+                </div>
+
+                <div class="card stat-card">
+                    <h4>Current Step</h4>
+                    <p id="stepText">Step 0</p>
+                </div>
+
+            </div>
+
+
+            <!-- Sorting Information -->
+            <div class="card information-card">
+                <h3>Algorithm Information</h3>
+
+                <p id="explanation">
+                    Select an algorithm and start sorting to see how it works.
+                </p>
+
+                <div class="complexity-grid">
+
+                    <div>
+                        <h4>Best Case</h4>
+                        <p id="best">—</p>
+                    </div>
+
+                    <div>
+                        <h4>Average Case</h4>
+                        <p id="average">—</p>
+                    </div>
+
+                    <div>
+                        <h4>Worst Case</h4>
+                        <p id="worst">—</p>
+                    </div>
+
+                    <div>
+                        <h4>Space Complexity</h4>
+                        <p id="space">—</p>
+                    </div>
+
+                </div>
+
+                <div class="action-box">
+                    <h4>Current Action</h4>
+                    <p id="currentAction">Ready to begin.</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- SEARCHING SECTION -->
+        <!-- ================================= -->
+
+        <section id="searching" class="section" style="display: none;">
+
+            <div class="section-heading">
+                <h2>Searching Visualizer</h2>
+                <p>Learn how algorithms find a target element in an array.</p>
+            </div>
+
+
+            <!-- Searching Controls -->
+            <div class="card controls-card">
+                <h3>Search Settings</h3>
+
+                <div class="controls-grid">
+
+                    <div class="control-group">
+                        <label for="searchAlgorithm">
+                            Select Algorithm
+                        </label>
+
+                        <select
+                            id="searchAlgorithm"
+                            onchange="changeSearchAlgorithm()"
+                        >
+                            <option value="linear">Linear Search</option>
+                            <option value="binary">Binary Search</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="target">Target Value</label>
+
+                        <input
+                            type="number"
+                            id="target"
+                            placeholder="Enter a number"
+                        >
+                    </div>
+
+                    <div class="control-group">
+                        <label for="searchSpeed">
+                            Speed: <span id="searchSpeedValue">Medium</span>
+                        </label>
+
+                        <input
+                            type="range"
+                            id="searchSpeed"
+                            min="1"
+                            max="100"
+                            value="50"
+                            oninput="updateSearchSpeed()"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="button-group">
+                    <button
+                        class="primary-btn"
+                        onclick="generateSearchArray()"
+                    >
+                        Generate Array
+                    </button>
+
+                    <button class="primary-btn" onclick="startSearch()">
+                        🔍 Search
+                    </button>
+
+                    <button class="secondary-btn" onclick="pauseSearch()">
+                        ⏸ Pause
+                    </button>
+
+                    <button class="secondary-btn" onclick="resetSearch()">
+                        ↻ Reset
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Searching Visualization -->
+            <div class="card visualization-card">
+                <div class="card-heading">
+                    <h3>Search Visualization</h3>
+                    <span id="searchStatus" class="status">Ready</span>
+                </div>
+
+                <div id="searchArray" class="search-array"></div>
+
+                <div class="legend">
+                    <span>
+                        <i class="legend-box purple"></i> Not Checked
+                    </span>
+
+                    <span>
+                        <i class="legend-box red"></i> Checking
+                    </span>
+
+                    <span>
+                        <i class="legend-box green"></i> Target Found
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- Searching Statistics -->
+            <div class="stats-grid">
+
+                <div class="card stat-card">
+                    <h4>Comparisons</h4>
+                    <p id="searchComparisons">0</p>
+                </div>
+
+                <div class="card stat-card">
+                    <h4>Current Step</h4>
+                    <p id="searchStepText">Step 0</p>
+                </div>
+
+                <div class="card stat-card">
+                    <h4>Target</h4>
+                    <p id="targetDisplay">—</p>
+                </div>
+
+            </div>
+
+
+            <!-- Searching Information -->
+            <div class="card information-card">
+                <h3>Search Information</h3>
+
+                <p id="searchExplanation">
+                    Select a searching algorithm to learn how it works.
+                </p>
+
+                <div class="complexity-grid">
+
+                    <div>
+                        <h4>Best Case</h4>
+                        <p id="searchBest">—</p>
+                    </div>
+
+                    <div>
+                        <h4>Average Case</h4>
+                        <p id="searchAverage">—</p>
+                    </div>
+
+                    <div>
+                        <h4>Worst Case</h4>
+                        <p id="searchWorst">—</p>
+                    </div>
+
+                    <div>
+                        <h4>Space Complexity</h4>
+                        <p id="searchSpace">—</p>
+                    </div>
+
+                </div>
+
+                <div class="action-box">
+                    <h4>Current Action</h4>
+                    <p id="searchAction">Ready to search.</p>
+                </div>
+
+                <div class="search-result-box">
+                    <h4>Search Result</h4>
+                    <p id="searchResult">Ready</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================================= -->
+        <!-- TREES SECTION -->
+        <!-- ================================= -->
+
+        
+<!-- TREES SECTION -->
+
+<section id="trees" class="section" style="display: none;">
+
+    <div class="section-heading">
+        <h2>🌳 Tree Visualizer</h2>
+        <p>Build and explore a Binary Search Tree interactively.</p>
+    </div>
+
+    <!-- Tree Controls -->
+    <div class="card controls-card">
+
+        <h3>Binary Search Tree Operations</h3>
+
+        <div class="controls-grid">
+
+            <div class="control-group">
+                <label for="treeValue">Enter a Number</label>
+                <input
+                    type="number"
+                    id="treeValue"
+                    placeholder="Example: 50"
+                >
+            </div>
+
+            <div class="control-group">
+                <label for="treeOperation">Select Operation</label>
+                <select id="treeOperation">
+                    <option value="insert">Insert Node</option>
+                    <option value="search">Search Node</option>
+                    <option value="delete">Delete Node</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="traversalType">Tree Traversal</label>
+                <select id="traversalType">
+                    <option value="inorder">Inorder</option>
+                    <option value="preorder">Preorder</option>
+                    <option value="postorder">Postorder</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="button-group">
+
+            <button class="primary-btn" onclick="performTreeOperation()">
+                Perform Operation
+            </button>
+
+            <button class="secondary-btn" onclick="runTreeTraversal()">
+                Run Traversal
+            </button>
+
+            <button class="secondary-btn" onclick="generateSampleTree()">
+                Sample Tree
+            </button>
+
+            <button class="secondary-btn" onclick="resetTree()">
+                ↻ Reset Tree
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Tree Visualization -->
+    <div class="card visualization-card">
+
+        <div class="card-heading">
+            <h3>Tree Structure</h3>
+            <span id="treeStatus" class="status">Ready</span>
+        </div>
+
+        <div id="treeCanvas" class="tree-canvas">
+
+            <p class="tree-empty-message">
+                Your tree will appear here. Insert a number to get started.
+            </p>
+
+        </div>
+
+        <div class="legend">
+
+            <span>
+                <i class="legend-box purple"></i>
+                Tree Node
+            </span>
+
+            <span>
+                <i class="legend-box green"></i>
+                Selected Node
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Tree Information -->
+    <div class="stats-grid">
+
+        <div class="card stat-card">
+            <h4>Total Nodes</h4>
+            <p id="treeNodeCount">0</p>
+        </div>
+
+        <div class="card stat-card">
+            <h4>Tree Height</h4>
+            <p id="treeHeight">0</p>
+        </div>
+
+        <div class="card stat-card">
+            <h4>Last Operation</h4>
+            <p id="treeLastOperation">None</p>
+        </div>
+
+    </div>
+
+
+    <!-- Traversal Result -->
+    <div class="card information-card">
+
+        <h3>Traversal Result</h3>
+
+        <p id="treeExplanation">
+            A Binary Search Tree stores smaller values on the left
+            and larger values on the right.
+        </p>
+
+        <div class="action-box">
+
+            <h4>Traversal Output</h4>
+
+            <p id="treeTraversalResult">
+                Run a traversal to see the result.
+            </p>
+
+        </div>
+
+        <div class="search-result-box">
+
+            <h4>Operation Message</h4>
+
+            <p id="treeMessage">
+                Ready to build your Binary Search Tree.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+        <!-- ================================= -->
+        <!-- GRAPHS SECTION -->
+        <!-- ================================= -->
+
+        
+<!-- GRAPHS SECTION -->
+
+
+<!-- GRAPH VISUALIZER SECTION -->
+
+<section id="graphs" class="section" style="display: none;">
+
+    <div class="section-heading">
+        <h2>🕸️ Graph Visualizer</h2>
+        <p>Explore graph connections, traversal algorithms and shortest paths.</p>
+    </div>
+
+    <!-- Graph Builder -->
+    <div class="card controls-card graph-controls-card">
+        <div class="card-heading">
+            <h3>Build Your Graph</h3>
+            <span class="status" id="graphStatus">Ready</span>
+        </div>
+
+        <div class="controls-grid">
+
+            <div class="control-group">
+                <label for="graphOperation">Operation</label>
+                <select id="graphOperation">
+                    <option value="addNode">Add Node</option>
+                    <option value="addEdge">Connect Nodes</option>
+                    <option value="removeNode">Remove Node</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="graphNode">First Node</label>
+                <input
+                    type="text"
+                    id="graphNode"
+                    placeholder="e.g. A"
+                    maxlength="3"
+                >
+            </div>
+
+            <div class="control-group">
+                <label for="graphNode2">Second Node</label>
+                <input
+                    type="text"
+                    id="graphNode2"
+                    placeholder="e.g. B"
+                    maxlength="3"
+                >
+            </div>
+
+        </div>
+
+        <div class="button-group">
+            <button class="primary-btn" onclick="performGraphOperation()">
+                Apply Operation
+            </button>
+
+            <button class="secondary-btn" onclick="generateSampleGraph()">
+                 Load Sample
+            </button>
+
+            <button class="secondary-btn" onclick="resetGraph()">
+                ↻ Clear Graph
+            </button>
+        </div>
+
+        <p class="graph-helper-text">
+            Tip: Add nodes first, then select Connect Nodes to create edges.
+        </p>
+    </div>
+
+    <!-- Traversal and Path -->
+    <div class="card controls-card graph-controls-card">
+        <h3>Traversal & Path Finding</h3>
+
+        <div class="controls-grid">
+
+            <div class="control-group">
+                <label for="graphAlgorithm">Algorithm</label>
+                <select id="graphAlgorithm">
+                    <option value="bfs">BFS — Breadth-First Search</option>
+                    <option value="dfs">DFS — Depth-First Search</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="graphStart">Start Node</label>
+                <input
+                    type="text"
+                    id="graphStart"
+                    placeholder="e.g. A"
+                    maxlength="3"
+                >
+            </div>
+
+            <div class="control-group">
+                <label for="graphTarget">Target Node</label>
+                <input
+                    type="text"
+                    id="graphTarget"
+                    placeholder="e.g. F"
+                    maxlength="3"
+                >
+            </div>
+
+        </div>
+
+        <div class="button-group">
+            <button class="primary-btn" onclick="runGraphTraversal()">
+                ▶ Run Traversal
+            </button>
+
+            <button class="secondary-btn" onclick="findGraphPath()">
+                Find Shortest Path
+            </button>
+        </div>
+    </div>
+
+    <!-- Graph Canvas -->
+    <div class="card visualization-card graph-visualization-card">
+
+        <div class="card-heading">
+            <div>
+                <h3>Graph Structure</h3>
+                <p class="graph-subtitle">Nodes and their connections</p>
+            </div>
+        </div>
+
+        <div id="graphCanvas" class="graph-canvas">
+            <div class="graph-empty-state">
+                <div class="graph-empty-icon">✧</div>
+                <h4>Your graph will appear here</h4>
+                <p>Add a node or load the sample graph to get started.</p>
+            </div>
+        </div>
+
+        <div class="legend graph-legend">
+            <span>
+                <i class="legend-box purple"></i>
+                Graph Node
+            </span>
+
+            <span>
+                <i class="legend-box green"></i>
+                Visited / Path Node
+            </span>
+        </div>
+    </div>
+
+    <!-- Graph Statistics -->
+    <div class="stats-grid graph-stats-grid">
+
+        <div class="card stat-card">
+            <h4>Total Nodes</h4>
+            <p id="graphNodeCount">0</p>
+            <span class="graph-stat-caption">Vertices in graph</span>
+        </div>
+
+        <div class="card stat-card">
+            <h4>Total Edges</h4>
+            <p id="graphEdgeCount">0</p>
+            <span class="graph-stat-caption">Connections</span>
+        </div>
+
+        <div class="card stat-card">
+            <h4>Last Algorithm</h4>
+            <p id="graphLastAlgorithm">None</p>
+            <span class="graph-stat-caption">Latest action</span>
+        </div>
+
+    </div>
+
+    <!-- Results -->
+    <div class="card information-card graph-results-card">
+        <h3>Results & Explanation</h3>
+
+        <div class="action-box">
+            <h4>Traversal Order / Shortest Path</h4>
+            <p id="graphTraversalResult">
+                Run BFS or DFS to see the traversal order.
+            </p>
+        </div>
+
+        <div class="search-result-box">
+            <h4>Activity Message</h4>
+            <p id="graphMessage">
+                Ready to build your graph.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>⚡ Algorithm Visualizer | Learn Algorithms Visually</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
